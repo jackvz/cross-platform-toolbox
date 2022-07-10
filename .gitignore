@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+.vagrant
+boxes/builds/*
+boxes/sources/*
+boxes/**/packer_cache
+boxes/**/Vagrantfile
+src/*

@@ -1,0 +1,72 @@
+{
+  "builders":
+  [
+    {
+      "type": "qemu",
+      "headless": false,
+      "qemuargs": [
+        [ "-m", "2048M" ],
+        [ "-smp", "cpus=1,maxcpus=16,cores=4" ]
+      ],
+      "disk_interface": "virtio",
+      "disk_size": 100000,
+      "format": "qcow2",
+      "net_device": "virtio-net",
+
+      "iso_urls": [
+        "../sources/CentOS-7-x86_64-Minimal-2009.iso",
+        "http://ftp.is.co.za/mirror/centos/7.9.2009/isos/x86_64/CentOS-7-x86_64-Minimal-2009.iso"
+      ],
+      "iso_checksum": "sha256:07b94e6b1a0b0260b94c83d6bb76b26bf7a310dc78d7a9c7432809fb9bc6194a",
+
+      "vm_name": "centos7-base",
+      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-qemu",
+
+      "http_directory": "docroot",
+      "http_port_min": 10082,
+      "http_port_max": 10089,
+
+      "ssh_host_port_min": 2222,
+      "ssh_host_port_max": 2229,
+
+      "ssh_username": "root",
+      "ssh_password": "CHANGEME",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "1200s",
+
+      "boot_wait": "40s",
+      "boot_command": [
+        "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/c7-kvm-ks.cfg<enter><wait>"
+      ],
+
+      "shutdown_command": "shutdown -P now"
+    }
+  ],
+
+  "provisioners":
+  [
+    {
+      "type": "shell-local",
+      "command": "tar zcf stardata-install.tar.gz stardata-install/"
+    },
+    {
+      "type": "file",
+      "source": "stardata-install.tar.gz",
+      "destination": "/root/stardata-install.tar.gz"
+    },
+    {
+      "type": "shell",
+      "pause_before": "5s",
+      "inline": [
+        "cd /root/",
+        "tar zxf stardata-install.tar.gz",
+        "cd stardata-install/",
+        "./install.sh",
+        "yum clean all"
+      ]
+    }
+  ],
+  "variables": {
+    "build_directory": "../builds"
+  }
+}

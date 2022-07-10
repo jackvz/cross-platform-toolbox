@@ -1,0 +1,45 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "iso_urls": [
+        "../sources/CentOS-7-x86_64-Minimal-2009.iso",
+        "http://ftp.is.co.za/mirror/centos/7.9.2009/isos/x86_64/CentOS-7-x86_64-Minimal-2009.iso"
+      ],
+      "iso_checksum": "sha256:07b94e6b1a0b0260b94c83d6bb76b26bf7a310dc78d7a9c7432809fb9bc6194a",
+      "output_directory": "{{ user `build_directory` }}/packer-{{user `template`}}-qemu",
+      "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+      "disk_size": "5000M",
+      "format": "qcow2",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{template_dir}}/http",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_timeout": "10000s",
+      "ssh_username": "vagrant",
+      "vm_name": "{{ user `template` }}",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "boot_wait": "10s",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos7-ks.cfg<enter>",
+        "<wait>"
+      ]
+    }
+  ],
+  "variables": {
+    "box_basename": "centos-7",
+    "build_directory": "../builds",
+    "cpus": "2",
+    "headless": "false",
+    "http_directory": "{{template_dir}}/http",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "memory": "1024",
+    "name": "centos-7",
+    "no_proxy": "{{env `no_proxy`}}",
+    "qemu_display": "gtk",
+    "template": "example",
+    "version": "TIMESTAMP"
+  }
+}
