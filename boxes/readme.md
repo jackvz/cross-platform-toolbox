@@ -10,7 +10,7 @@ The [FreeBSD Cross Build box template](./freebsd-cross-build/freebsd-cross-build
 
 ## Requirements
 
-Get [Packer](https://www.packer.io/), [Vagrant](https://www.vagrantup.com/downloads), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and/or [QEMU](https://www.qemu.org/download/), depending on which virtualiser(s) you prefer (QEMU recommended). If you want to also create Docker images, [get Docker](https://docs.docker.com/get-docker/). All available for Windows, macOS, Linux and FreeBSD.
+Get [Packer](https://www.packer.io/), [Vagrant](https://www.vagrantup.com/downloads), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and/or [QEMU](https://www.qemu.org/download/), depending on which virtualiser(s) you prefer. If you want to also create Docker images, [get Docker](https://docs.docker.com/get-docker/). All available for Windows, macOS, Linux and FreeBSD.
 
 Install the Vagrant plugin(s):
 
@@ -18,7 +18,6 @@ Install the Vagrant plugin(s):
 vagrant plugin install virtualbox
 vagrant plugin install qemu
 ```
-
 
 ### Get the Operating System Installers
 
@@ -43,20 +42,20 @@ cd [windows|debian|fedora|freebsd]
 Validate the box definition, build it and a Packer box template will be in `boxes\builds`:
 ```sh
 export PACKER_LOG=1
-packer validate [windows-2019|debian-11.3-amd64|fedora-33-x86_64|freebsd-13.0-amd64].json
-packer build [windows-2019|debian-11.3-amd64|fedora-33-x86_64|freebsd-13.0-amd64].json
+packer validate -only=[virtualbox-iso|qemu] [windows-2019|debian-11.3-amd64|fedora-33-x86_64|freebsd-13.0-amd64].json
+packer build -only=[virtualbox-iso|qemu] [windows-2019|debian-11.3-amd64|fedora-33-x86_64|freebsd-13.0-amd64].json
 ```
 
 Register the box template as a Vagrant box on your machine:
 ```sh
-vagrant box add --force --name [windows-2019|debian-11|fedora-33|freebsd-13] ../builds/[windows-2019|debian-11|fedora-33|freebsd-13]-virtualbox.box
+vagrant box add --force --name [windows-2019|debian-11|fedora-33|freebsd-13] ../builds/[windows-2019|debian-11|fedora-33|freebsd-13]-[virtualbox|libvirt].box
 ```
 
-Test the box out by starting it, and keep an eye on VirtualBox to verify that everything's running, or run a [Vagrant command](https://www.vagrantup.com/docs/cli) against the box.
+Test the box out by starting it, and keep an eye on VirtualBox or QEMU to verify that everything's running, or run a [Vagrant command](https://www.vagrantup.com/docs/cli) against the box.
 
 ```sh
 vagrant init --force [windows-2019|debian-11|fedora-33|freebsd-13]
-vagrant up
+vagrant up --provider [virtualbox|qemu]
 ...
 vagrant destroy default
 ```

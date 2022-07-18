@@ -8,7 +8,7 @@ Automated setup of Windows, Linux (Debian and Fedora) and FreeBSD build environm
 
 ### Installation
 
-Get [Vagrant](https://www.vagrantup.com/downloads), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and/or [QEMU](https://www.qemu.org/download/), depending on which virtualiser(s) you prefer (QEMU recommended), available for Windows, macOS, Linux and FreeBSD.
+Get [Vagrant](https://www.vagrantup.com/downloads), and [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and/or [QEMU](https://www.qemu.org/download/), depending on which virtualiser(s) you prefer, available for Windows, macOS, Linux and FreeBSD.
 
 Install the Vagrant plugin(s):
 
